@@ -29,6 +29,9 @@ public class Vessel extends Thread {
 	private GPSSimulator GPS;
 	private Random generator = new Random(System.nanoTime());
 
+	public double getInterval() {
+		return interval;
+	}	
 	
 	private double calcHullSpeed( int waterLineLengthMeters ) {
 		double waterLineLengthFeet = waterLineLengthMeters * 3.2808;

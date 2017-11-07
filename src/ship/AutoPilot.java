@@ -10,6 +10,7 @@ public class AutoPilot extends Thread {
 	private double currentAzimuth;
 	private Double rudderPosition;
 	private PilotObserver observer;
+	private double error;
 	
 	private final int RUDDER_LIMIT = 5; // Limite do leme ( -5 ate 5 )
 	private final int RUDDER_STEP = 1;  // O quando o leme se desloca por vez em graus. Max = 5
@@ -43,6 +44,10 @@ public class AutoPilot extends Thread {
 		return this.rudderPosition.intValue();
 	}
 	
+	public double getError() {
+		return this.error;
+	}
+	
 	public void setObserver( PilotObserver observer ) {
 		this.observer = observer;
 	}
@@ -55,16 +60,17 @@ public class AutoPilot extends Thread {
 			rudderPosition = miniPID.getOutput(currentAzimuth, targetAzimuth);
 			ship.SetRudderPosition( rudderPosition.intValue()  );
 			currentAzimuth =  ship.GetHeading();
+			error = targetAzimuth - currentAzimuth;
 			
 			if( observer != null ) {
-				observer.log(rudderPosition.intValue(), currentAzimuth, targetAzimuth);
+				observer.log(rudderPosition.intValue(), currentAzimuth, targetAzimuth, error);
 			}
 			
 			try {
-				Thread.sleep( 500 );
+				Thread.sleep( (long) ship.getInterval() * 1000 );
 			} catch (InterruptedException e) {
 				e.printStackTrace();
-			}			
+			}				
 			
 		}
 		

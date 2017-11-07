@@ -18,23 +18,20 @@ public class Main {
 	static int rudderposition = 0;
 	static int throttleposition = 0;
 	
-	
-
-	
 	public static void main(String[] args) {
 		
 		Vessel vessel = new Vessel( ObserverFactory.getObserver() , interval, Ships.FRAGATA_NITEROI, boatspeed, heading, 
-				latitude, longitude, altitude, rudderposition, throttleposition, 3.0);
-		
-		
+				latitude, longitude, altitude, rudderposition, throttleposition, 2.0);
 		vessel.start();
 		
 		vessel.SetThrottlePosition(12);
 		
-		AutoPilot ap = new AutoPilot( vessel, 201);
+		AutoPilot ap = new AutoPilot( vessel, vessel.GetHeading() );
 		PilotObserver pilotObs = new BasicPilotObserver();
 		ap.setObserver( pilotObs );
 		ap.start();
+		
+		ap.setCourseTo( 180 );
 
 	}
 
