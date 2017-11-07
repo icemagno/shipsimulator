@@ -11,7 +11,7 @@ import java.util.Random;
  *
  */
 public class SimulationThread extends Thread {
-
+	private double rudderFactor;
 	private double rudderPosition;
 	private double throttlePosition;
 	private double interval;
@@ -30,21 +30,22 @@ public class SimulationThread extends Thread {
 	/**
 	 * Initialize the Simulation
 	 */
-	public SimulationThread(InfoObserver observer, double intv, double hsp, double spd, double hdg, double lat, double lon, double alt, double rud, double thr) {
+	public SimulationThread(InfoObserver observer, double intv, double hsp, double spd, double hdg, 
+			double lat, double lon, double alt, double rud, double thr, double rudderFactor) {
 		
-		GPS = new GPSSimulator( observer );
-		
-		interval = intv;
-		hullSpeed = hsp;
-		boatSpeed = spd;
-		heading = hdg;
-		latitude = lat;
-		longitude = lon;
-		rudderPosition = rud;
-		throttlePosition = thr;
-		trueWindDirection = generator.nextDouble() * 360;
-		trueWindSpeed = generator.nextDouble() * 20.0 + 5.0;
-		GPS.start();
+		this.rudderFactor = rudderFactor;
+		this.GPS = new GPSSimulator( observer );
+		this.interval = intv;
+		this.hullSpeed = hsp;
+		this.boatSpeed = spd;
+		this.heading = hdg;
+		this.latitude = lat;
+		this.longitude = lon;
+		this.rudderPosition = rud;
+		this.throttlePosition = thr;
+		this.trueWindDirection = generator.nextDouble() * 360;
+		this.trueWindSpeed = generator.nextDouble() * 20.0 + 5.0;
+		this.GPS.start();
 	}
 
 	public void SetRudderPosition(int p) {
@@ -112,7 +113,7 @@ public class SimulationThread extends Thread {
 			 * direction or the other and correct as necessary.
 			 */
 			if (rudderPosition != 0 && boatSpeed != 0) {
-				heading = heading + rudderPosition * 2.0;
+				heading = heading + rudderPosition * rudderFactor;
 			}
 			if (heading < 0) {
 				heading = heading + 360;
@@ -160,11 +161,13 @@ public class SimulationThread extends Thread {
 			double l2 = Math.toRadians(longitude) + Math.atan2(Math.sin(Math.toRadians(heading)) * Math.sin(displacement / earthRadius) * Math.cos(Math.toRadians(latitude)), Math.cos(displacement / earthRadius) - Math.sin(Math.toRadians(latitude)) * Math.sin(p2));
 			longitude = Math.toDegrees(l2);
 			GPS.setLongitude(longitude);
+			
 			try {
 				Thread.sleep((long) interval * 1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			
 		}
 	}
 }
