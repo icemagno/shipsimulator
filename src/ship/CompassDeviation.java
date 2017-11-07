@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.mattheys;
+package ship;
 
 /**
  * @author tony

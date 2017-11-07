@@ -1,7 +1,9 @@
 /**
  * 
  */
-package com.mattheys;
+package ship;
+
+import ship.observers.InfoObserver;
 
 /**
  * @author tony

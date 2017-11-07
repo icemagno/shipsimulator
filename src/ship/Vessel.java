@@ -2,15 +2,17 @@
  * Main Simulation thread. Runs a loop that recalculates simulation parameters periodically. 
  * The simulation interval can be set when the thread is started.
  */
-package com.mattheys;
+package ship;
 
 import java.util.Random;
+
+import ship.observers.InfoObserver;
 
 /**
  * @author Tony Mattheys
  *
  */
-public class SimulationThread extends Thread {
+public class Vessel extends Thread {
 	private double rudderFactor;
 	private double rudderPosition;
 	private double throttlePosition;
@@ -27,16 +29,27 @@ public class SimulationThread extends Thread {
 	private GPSSimulator GPS;
 	private Random generator = new Random(System.nanoTime());
 
+	
+	private double calcHullSpeed( int waterLineLengthMeters ) {
+		double waterLineLengthFeet = waterLineLengthMeters * 3.2808;
+		double hullSpeed = 1.34 * Math.sqrt( waterLineLengthFeet );
+		return hullSpeed;
+	}
+		
+	
 	/**
 	 * Initialize the Simulation
 	 */
-	public SimulationThread(InfoObserver observer, double intv, double hsp, double spd, double hdg, 
+	public Vessel(InfoObserver observer, double intv, int ship, double spd, double hdg, 
 			double lat, double lon, double alt, double rud, double thr, double rudderFactor) {
+		
+		
+		double hullspeed = calcHullSpeed( ship );
 		
 		this.rudderFactor = rudderFactor;
 		this.GPS = new GPSSimulator( observer );
 		this.interval = intv;
-		this.hullSpeed = hsp;
+		this.hullSpeed = hullspeed;
 		this.boatSpeed = spd;
 		this.heading = hdg;
 		this.latitude = lat;

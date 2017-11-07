@@ -1,4 +1,4 @@
-package com.mattheys;
+package ship;
 
 public class InfoProtocol {
 	private double latitude;

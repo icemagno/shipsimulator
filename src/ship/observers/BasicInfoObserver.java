@@ -1,6 +1,8 @@
-package com.mattheys;
+package ship.observers;
 
-public class TestInfoObserver implements InfoObserver {
+import ship.InfoProtocol;
+
+public class BasicInfoObserver implements InfoObserver {
 
 	@Override
 	public void send(InfoProtocol info) {
