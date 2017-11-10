@@ -67,6 +67,10 @@ public class Vessel extends Thread {
 	public void SetRudderPosition(int p) {
 		rudderPosition = p;
 	}
+	
+	public int getRudderPosition() {
+		return ( (Double)rudderPosition ).intValue();
+	}	
 
 	public void SetThrottlePosition(double t) {
 		throttlePosition = t;
@@ -85,7 +89,7 @@ public class Vessel extends Thread {
 	}
 
 	public double GetBoatSpeed() {
-		return boatSpeed;
+		return ((Double)boatSpeed).intValue();
 	}
 
 	public double GetHeadingMagnetic() {
